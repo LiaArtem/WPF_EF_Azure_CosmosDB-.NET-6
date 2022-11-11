@@ -1,4 +1,4 @@
-# WPF_EF_Azure_CosmosDB-.NET-6
+# WPF_EF_Azure_CosmosDB-.NET-7
 WPF project - Test project using Entity Framework Core to the Azure Cosmos database.
 
 Создаем базу данных Azure Cosmos DB на портале:
