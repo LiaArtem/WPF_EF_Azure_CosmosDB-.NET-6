@@ -67,7 +67,7 @@ namespace WPF_EF_Azure_CosmosDB
         public DbSet<UserData> UsersData { get; set; }
         
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
-        {
+        {            
             Database.EnsureCreated();
         }
     }
