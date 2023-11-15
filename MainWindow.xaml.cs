@@ -23,7 +23,7 @@ namespace WPF_EF_Azure_CosmosDB
     public class UserData
     {        
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string Id { get; set; }        
+        public string? Id { get; set; }        
         private string? textValue;
         private int? intValue;
         private double? doubleValue;
@@ -101,15 +101,15 @@ namespace WPF_EF_Azure_CosmosDB
             var config = builder.Build();            
             
             // строка подключения
-            string connectionString = config.GetConnectionString("DefaultConnection");
+            string? connectionString = config.GetConnectionString("DefaultConnection");
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationContext>();
 
             string m_AccountEndpoint = "", m_AccountKey = "";
-            foreach (string part in connectionString.Split(";"))
+            foreach (string? part in connectionString!.Split(";"))
             {
                 if (string.IsNullOrEmpty(part)) continue;
-                if (part.Contains("AccountEndpoint=")) { m_AccountEndpoint = part[(part.IndexOf("=") + 1)..]; }
-                if (part.Contains("AccountKey=")) { m_AccountKey = part[(part.IndexOf("=") + 1)..]; }
+                if (part.Contains("AccountEndpoint=")) { m_AccountEndpoint = part[(part.IndexOf(Convert.ToChar("=")) + 1)..]; }
+                if (part.Contains("AccountKey=")) { m_AccountKey = part[(part.IndexOf(Convert.ToChar("=")) + 1)..]; }
             }
             
             var options = optionsBuilder
@@ -185,7 +185,7 @@ namespace WPF_EF_Azure_CosmosDB
                 else if (value_type.Text == "bool")
                 {
                     m_value1_bool = false;
-                    if (m_value1.ToUpper() == "T" || m_value1.ToLower() == "true") m_value1_bool = true;
+                    if (m_value1.Equals("T", StringComparison.CurrentCultureIgnoreCase) || m_value1.Equals("true", StringComparison.CurrentCultureIgnoreCase)) m_value1_bool = true;
                     DataGrid1.ItemsSource = db.UsersData.ToList().Where(p => p.BoolValue == m_value1_bool);
                 }
                 else if (value_type.Text == "date")
@@ -257,7 +257,7 @@ namespace WPF_EF_Azure_CosmosDB
             {
                 // получаем измененный объект                
                 using ApplicationContext db = new(LoadConfiguration());
-                ud = db.UsersData.Find(addWin.UserDataAdd.Id);
+                ud = db.UsersData.Find(addWin.UserDataAdd.Id)!;
                 if (ud != null)
                 {
                     ud.TextValue = addWin.UserDataAdd.TextValue;
